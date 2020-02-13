@@ -40,7 +40,7 @@ public class Presenter {
 
     public void mergeOptions(View view, Options options) {
         mergeStatusBarOptions(view, options.statusBar);
-        mergeNavigationBarOptions(options.navigationBar);
+        mergeNavigationBarOptions(view, options.navigationBar);
     }
 
     public void applyOptions(ViewController view, Options options) {
@@ -112,6 +112,7 @@ public class Presenter {
         }
         decorView.setSystemUiVisibility(flags);
     }
+
 
     private void setStatusBarBackgroundColor(StatusBarOptions statusBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && statusBar.backgroundColor.canApplyValue()) {
@@ -193,10 +194,12 @@ public class Presenter {
 
     private void applyNavigationBarOptions(NavigationBarOptions options) {
         setNavigationBarBackgroundColor(options);
+        setNavigationBarVisible(options.visible);
     }
 
-    private void mergeNavigationBarOptions(NavigationBarOptions options) {
+    private void mergeNavigationBarOptions(View view, NavigationBarOptions options) {
         setNavigationBarBackgroundColor(options);
+        mergeNavigationBarVisible(view, options.visible);
     }
 
     private void setNavigationBarBackgroundColor(NavigationBarOptions navigationBar) {
@@ -220,6 +223,30 @@ public class Presenter {
             decorView.setSystemUiVisibility(flags);
         }
     }
+
+    private void setNavigationBarVisible(Bool visible) {
+        View decorView = activity.getWindow().getDecorView();
+        int flags = decorView.getSystemUiVisibility();
+        if (visible.isFalse()) {
+            flags |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        } else {
+            flags &= ~View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        }
+        decorView.setSystemUiVisibility(flags);
+    }
+
+    private void mergeNavigationBarVisible(View view, Bool visible) {
+        if (visible.hasValue()) {
+            int flags = view.getSystemUiVisibility();
+            if (visible.isTrue()) {
+                flags &= ~View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            } else {
+                flags |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            }
+            view.setSystemUiVisibility(flags);
+        }
+    }
+
 
     private boolean isColorLight(int color) {
         double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
