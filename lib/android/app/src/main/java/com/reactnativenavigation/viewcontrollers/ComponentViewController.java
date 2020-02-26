@@ -118,12 +118,22 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
         return navigationBarInset;
     }
 
+    private int getLeftInset(WindowInsetsCompat insets) {
+        int navigationBarInset = resolveCurrentOptions().statusBar.isHiddenOrDrawBehind() ? 0 : insets.getSystemWindowInsetLeft();
+        return navigationBarInset;
+    }
+
+    private int getRightInset(WindowInsetsCompat insets) {
+        int navigationBarInset = resolveCurrentOptions().statusBar.isHiddenOrDrawBehind() ? 0 : insets.getSystemWindowInsetRight();
+        return navigationBarInset;
+    }
+
     @Override
     protected WindowInsetsCompat applyWindowInsets(ViewController view, WindowInsetsCompat insets) {
         ViewCompat.onApplyWindowInsets(view.getView(), insets.replaceSystemWindowInsets(
-                insets.getSystemWindowInsetLeft(),
+                getLeftInset(insets),
                 insets.getSystemWindowInsetTop(),
-                insets.getSystemWindowInsetRight(),
+                getRightInset(insets),
                 Math.max(insets.getSystemWindowInsetBottom() - getBottomInset(), 0)
         ));
         return insets;
