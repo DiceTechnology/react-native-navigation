@@ -115,7 +115,7 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     @Override
     public int getBottomInset() {
         boolean shouldSetBottomInset = !(resolveCurrentOptions().bottomTabsOptions.isHiddenOrDrawBehind() || resolveCurrentOptions().statusBar.isHiddenOrDrawBehind());
-        int navigationBarInset = shouldSetBottomInset ? 0 : NavigationBarUtils.getNavigationBarHeight(getActivity());
+        int navigationBarInset = !shouldSetBottomInset ? 0 : NavigationBarUtils.getNavigationBarHeight(getActivity());
         return navigationBarInset;
     }
 
