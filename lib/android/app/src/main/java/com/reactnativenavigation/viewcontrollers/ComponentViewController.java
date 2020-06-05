@@ -1,7 +1,7 @@
 package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
-import android.content.res.Configuration;
+import android.util.Log;
 import android.view.View;
 import android.content.Context;
 
@@ -117,10 +117,13 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
     @Override
     public int getBottomInset() {
         Context activity = getActivity();
-        boolean isPortrait = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        boolean shouldSetBottomInset = !(resolveCurrentOptions().bottomTabsOptions.isHiddenOrDrawBehind() || resolveCurrentOptions().statusBar.isHiddenOrDrawBehind());
-        int navigationHeight = NavigationBarUtils.getNavigationBarHeight(activity);
-        int navigationBarInset = !shouldSetBottomInset && isPortrait ? 0 : navigationHeight;
+        int systemNavigationType = NavigationBarUtils.getSystemNavigationType(activity);
+        boolean isEdgeToEdge = systemNavigationType == 2;
+        boolean isStatusBarHidden = resolveCurrentOptions().statusBar.isHiddenOrDrawBehind();
+        boolean isBottomTabsHidden = resolveCurrentOptions().bottomTabsOptions.isHiddenOrDrawBehind();
+        int navigationBarInset = (isBottomTabsHidden || (isEdgeToEdge && isStatusBarHidden))
+                ? NavigationBarUtils.getNavigationBarHeight(activity)
+                : 0;
         return navigationBarInset;
     }
 
