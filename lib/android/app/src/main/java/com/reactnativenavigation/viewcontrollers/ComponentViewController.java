@@ -1,7 +1,6 @@
 package com.reactnativenavigation.viewcontrollers;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.content.Context;
 
