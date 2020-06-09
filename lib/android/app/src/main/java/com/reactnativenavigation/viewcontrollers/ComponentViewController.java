@@ -120,9 +120,9 @@ public class ComponentViewController extends ChildController<ComponentLayout> {
         boolean isEdgeToEdge = systemNavigationType == 2;
         boolean isStatusBarHidden = resolveCurrentOptions().statusBar.isHiddenOrDrawBehind();
         boolean isBottomTabsHidden = resolveCurrentOptions().bottomTabsOptions.isHiddenOrDrawBehind();
-        int navigationBarInset = (isBottomTabsHidden || (isEdgeToEdge && isStatusBarHidden))
-                ? NavigationBarUtils.getNavigationBarHeight(activity)
-                : 0;
+        int navigationBarInset = ((isBottomTabsHidden && !isStatusBarHidden) || (isStatusBarHidden && !isEdgeToEdge))
+                ? 0
+                : NavigationBarUtils.getNavigationBarHeight(activity);
         return navigationBarInset;
     }
 
